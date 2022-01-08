@@ -25,6 +25,13 @@ export default function App() {
     // react native에 있는 모든 텍스는 text component안에 들어가야함!
 
     <View style={styles.container}>
+      <View
+        style={{ width: 200, height: 200, backgroundColor: "red" }}>
+      </View>
+      <View
+        style={{ width: 200, height: 200, backgroundColor: "blue" }}>
+      </View>
+
       <Text style={styles.text}>Hello! I made a RN App!</Text>
       <StatusBar style="auto" />
       {/* Status bar는 시계 와이파이, 배터리와 같은 것들을 설정하는/소통하는 역할임 */}
@@ -43,7 +50,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   text: {
-    fontSize: 45,
-    color: "red",
+    fontSize: 20,
+    color: "black",
   }
 });
