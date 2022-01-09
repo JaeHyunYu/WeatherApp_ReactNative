@@ -1,4 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
+import { useEffect, useState } from 'react';
+import * as Location from 'expo-location';
 import { StyleSheet, Text, View, ScrollView, Dimensions } from 'react-native';
 // 이런 StyleSheet, Text와 같은 Component들은  react native 공식 홈페이지에서 더 확인할 수 있음
 /*
@@ -25,13 +27,34 @@ const { height, width: SCREEN_WIDTH } = Dimensions.get('window');
 console.log(SCREEN_WIDTH);
 
 export default function App() {
+
+  const [city, setCity] = useState('Loading');
+
+  const [location, setLocation] = useState();
+  const [ok, setOk] = useState(true);
+  const ask = async () => {
+    const { granted } = await Location.requestForegroundPermissionsAsync();
+    if (!granted) {
+      setOk(false);
+    }
+    // 위에 코드로 권한 허가
+    const { coords: { latitude, longitude } } = await Location.getCurrentPositionAsync({ accuracy: 5 });
+    // 위의 코드로 latitued, longitude 받아오기
+    const location = await Location.reverseGeocodeAsync({ latitude, longitude }, { useGoogleMaps: false });
+    setCity(location[0].city);
+    // city 값 가져옴
+  }
+
+  useEffect(() => {
+    ask();
+  }, [])
   return (
     // View는 Container라고 생각하면됨 div대신 사용하는거!
     // react native에 있는 모든 텍스는 text component안에 들어가야함!
 
     <View style={styles.container}>
       <View style={styles.city}>
-        <Text style={styles.cityName}>Seoul</Text>
+        <Text style={styles.cityName}>{city}</Text>
       </View>
 
       <ScrollView
@@ -40,7 +63,7 @@ export default function App() {
         pagingEnabled
         contentContainerStyle={styles.weather}>
         {/* ScrollView를 이용할 경우,style prop이 아닌
-         container style을 이용해야함
+        container style을 이용해야함
         pagingEnabled속성을 쓰면 carousel 쓰는 것처럼 보여짐
         */}
         <View style={styles.day}>

@@ -15,4 +15,4 @@ ReactNative에서 Layout은 숫자를 생각하면 됨
 ReactNative같은경우 스크롤이 안생긴다고했음(브라우저가 아닌 View이기떄문에)
 따라서 스크롤 생기게하는 Scroll View를 이용하면 우리가 사용했던 브라우저처럼 스크롤을 할 수 있게되어짐
 
-dimenstion api를 이용하면 화면의 크기를 받아올 수 있음@
+dimenstion api를 이용하면 화면의 크기를 받아올 수 있음
