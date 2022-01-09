@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Dimensions } from 'react-native';
 // 이런 StyleSheet, Text와 같은 Component들은  react native 공식 홈페이지에서 더 확인할 수 있음
 /*
 이전 버전들에는 다양한 component들이 존재했지만, 최신 버전들에선 많이 사라짐
@@ -18,35 +18,52 @@ EXPO SDK는 다양하고 멋진 component들이 있음
 이젠 EXPO Packages/API를 사용하면 많은 API들을 사용할 수 있는 것임!
 
 */
+const { height, width: SCREEN_WIDTH } = Dimensions.get('window');
+// 위에 코드는 object가져와서 내가 원하는 이름으로 바꿔주는 뜻!
+// width를 SCREEN_WIDTH로 사용하겠따~
+
+console.log(SCREEN_WIDTH);
 
 export default function App() {
   return (
     // View는 Container라고 생각하면됨 div대신 사용하는거!
     // react native에 있는 모든 텍스는 text component안에 들어가야함!
 
-    <View style={{ flex: 1 }}>
-      {/*이런식으로 flex:1해서 비율로 layout함! 주로! 이런 비율들은 옆에있는 view와 비교되어져서 비율이 계산되어지는거임
-      %나 사이즈를 적을 필요없음! 그냥 비율로 작성해서 layout하면됨!*/}
-      <View
-        style={{ flex: 1, backgroundColor: "red", flexDirection: "row" }}>
+    <View style={styles.container}>
+      <View style={styles.city}>
+        <Text style={styles.cityName}>Seoul</Text>
+      </View>
 
-        <View
-          style={{ flex: 1, backgroundColor: "gray" }}>
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        pagingEnabled
+        contentContainerStyle={styles.weather}>
+        {/* ScrollView를 이용할 경우,style prop이 아닌
+         container style을 이용해야함
+        pagingEnabled속성을 쓰면 carousel 쓰는 것처럼 보여짐
+        */}
+        <View style={styles.day}>
+          <Text style={styles.temp}>27</Text>
+          <Text style={styles.description}>sunny</Text>
         </View>
-        <View
-          style={{ flex: 1, backgroundColor: "black" }}>
+        <View style={styles.day}>
+          <Text style={styles.temp}>27</Text>
+          <Text style={styles.description}>sunny</Text>
         </View>
-      </View>
-      <View
-        style={{ flex: 1, backgroundColor: "blue" }}>
-      </View>
-      <View
-        style={{ flex: 1, backgroundColor: "tomato" }}>
-      </View>
+        <View style={styles.day}>
+          <Text style={styles.temp}>27</Text>
+          <Text style={styles.description}>sunny</Text>
+        </View>
+        <View style={styles.day}>
+          <Text style={styles.temp}>27</Text>
+          <Text style={styles.description}>sunny</Text>
+        </View>
 
 
-      <StatusBar style="auto" />
-      {/* Status bar는 시계 와이파이, 배터리와 같은 것들을 설정하는/소통하는 역할임 */}
+      </ScrollView>
+
+      <StatusBar />
     </View >
   );
 }
@@ -55,14 +72,32 @@ export default function App() {
 // 아래와 같이 Stylesheet만들어서 사용해도되고, 위에 Component들에 인라인형식으로 style={} 이런식으로 넣어도 상관 없음
 const styles = StyleSheet.create({
   container: {
-    // border와 같은 몇몇 속성들은 사용불가 / but 우리가 알고있는 98%정도의 css는 사용가능!
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flex: 1, backgroundColor: 'rgba(39, 245, 228, 0.34)'
   },
-  text: {
-    fontSize: 20,
-    color: "black",
+  city: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  cityName: {
+    fontSize: 58,
+    fontWeight: "600"
+  },
+  weather: {
+
+  },
+  day: {
+    width: SCREEN_WIDTH,
+    alignItems: 'center',
+
+  },
+  temp: {
+    marginTop: 50,
+    fontSize: 158
+  },
+  description: {
+    marginTop: -20,
+    fontSize: 60,
   }
+
 });
