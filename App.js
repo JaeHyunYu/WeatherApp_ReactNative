@@ -24,18 +24,30 @@ export default function App() {
     // View는 Container라고 생각하면됨 div대신 사용하는거!
     // react native에 있는 모든 텍스는 text component안에 들어가야함!
 
-    <View style={styles.container}>
+    <View style={{ flex: 1 }}>
+      {/*이런식으로 flex:1해서 비율로 layout함! 주로! 이런 비율들은 옆에있는 view와 비교되어져서 비율이 계산되어지는거임
+      %나 사이즈를 적을 필요없음! 그냥 비율로 작성해서 layout하면됨!*/}
       <View
-        style={{ width: 200, height: 200, backgroundColor: "red" }}>
+        style={{ flex: 1, backgroundColor: "red", flexDirection: "row" }}>
+
+        <View
+          style={{ flex: 1, backgroundColor: "gray" }}>
+        </View>
+        <View
+          style={{ flex: 1, backgroundColor: "black" }}>
+        </View>
       </View>
       <View
-        style={{ width: 200, height: 200, backgroundColor: "blue" }}>
+        style={{ flex: 1, backgroundColor: "blue" }}>
+      </View>
+      <View
+        style={{ flex: 1, backgroundColor: "tomato" }}>
       </View>
 
-      <Text style={styles.text}>Hello! I made a RN App!</Text>
+
       <StatusBar style="auto" />
       {/* Status bar는 시계 와이파이, 배터리와 같은 것들을 설정하는/소통하는 역할임 */}
-    </View>
+    </View >
   );
 }
 
