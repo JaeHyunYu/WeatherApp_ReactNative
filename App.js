@@ -20,6 +20,17 @@ EXPO SDK는 다양하고 멋진 component들이 있음
 이젠 EXPO Packages/API를 사용하면 많은 API들을 사용할 수 있는 것임!
 
 */
+import { Fontisto } from "@expo/vector-icons"
+// https://icons.expo.fyi/ 들어가서 아이콘들 확인 가능
+const icons = {
+  "Clouds": "cloudy",
+  "Clear": "day-sunny",
+  "Rain": "rain",
+  "Atmosphere:": "cloudy-gusts",
+  "Snow": "snow",
+  "Drizzle": "day-rain",
+  "Thunderstorm": "lightning",
+}
 const { height, width: SCREEN_WIDTH } = Dimensions.get('window');
 // 위에 코드는 object가져와서 내가 원하는 이름으로 바꿔주는 뜻!
 // width를 SCREEN_WIDTH로 사용하겠따~
@@ -83,8 +94,17 @@ export default function App() {
           </View> :
           (
             days.map((day, index) =>
-              <View key={index} style={styles.day}>
-                <Text style={styles.temp}>{parseFloat(day.temp.day).toFixed(1)}</Text>
+              <View key={index} style={{ ...styles.day, alignItems: "center" }}>
+                {/* es6 기능 스타일을 갖고오고 추가적으로 또 스타일을 직접넣고싶으면 두개의 {{넣고
+                                      추가적으로 해주면됨}} */}
+                <View style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "space-between"
+                }}>
+                  <Text style={styles.temp}>{parseFloat(day.temp.day).toFixed(1)}</Text>
+                  <Fontisto name={icons[day.weather[0].main]} size={80} color="black" />
+                </View>
                 <Text style={styles.description}>{day.weather[0].main}</Text>
                 <Text style={styles.tinyText}>{day.weather[0].description}</Text>
 
