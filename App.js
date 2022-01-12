@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
 import * as Location from 'expo-location';
-import { StyleSheet, Text, View, ScrollView, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Dimensions, ActivityIndicator } from 'react-native';
 // 이런 StyleSheet, Text와 같은 Component들은  react native 공식 홈페이지에서 더 확인할 수 있음
 /*
 이전 버전들에는 다양한 component들이 존재했지만, 최신 버전들에선 많이 사라짐
@@ -29,10 +29,10 @@ console.log(SCREEN_WIDTH);
 export default function App() {
 
   const [city, setCity] = useState('Loading');
-
-  const [location, setLocation] = useState();
+  const [days, setDays] = useState([]);
   const [ok, setOk] = useState(true);
-  const ask = async () => {
+  const API_KEY = "73f2ad47a90724ebfcc896cf62b32c3d";
+  const getWheather = async () => {
     const { granted } = await Location.requestForegroundPermissionsAsync();
     if (!granted) {
       setOk(false);
@@ -43,10 +43,18 @@ export default function App() {
     const location = await Location.reverseGeocodeAsync({ latitude, longitude }, { useGoogleMaps: false });
     setCity(location[0].city);
     // city 값 가져옴
+    const response = await fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&exclude=alerts&appid=${API_KEY}&units=metric`);
+    const json = await response.json();
+    setDays(json.daily);
+
   }
 
+  // 이건 그냥 prototype 이니까 보안적으로 안좋지만 그냥 api key를 직접 넣는 거임
+  //https://home.openweathermap.org/api_keys
+  // -> 날씨정보 제공해주는 API
+
   useEffect(() => {
-    ask();
+    getWheather();
   }, [])
   return (
     // View는 Container라고 생각하면됨 div대신 사용하는거!
@@ -66,25 +74,26 @@ export default function App() {
         container style을 이용해야함
         pagingEnabled속성을 쓰면 carousel 쓰는 것처럼 보여짐
         */}
-        <View style={styles.day}>
-          <Text style={styles.temp}>27</Text>
-          <Text style={styles.description}>sunny</Text>
-        </View>
-        <View style={styles.day}>
-          <Text style={styles.temp}>27</Text>
-          <Text style={styles.description}>sunny</Text>
-        </View>
-        <View style={styles.day}>
-          <Text style={styles.temp}>27</Text>
-          <Text style={styles.description}>sunny</Text>
-        </View>
-        <View style={styles.day}>
-          <Text style={styles.temp}>27</Text>
-          <Text style={styles.description}>sunny</Text>
-        </View>
 
 
-      </ScrollView>
+        {days.length === 0 ?
+          <View style={styles.day}>
+            <ActivityIndicator color="black" size="large" style={{ marginTop: 10 }} />
+            {/* ActivityIndicator 는 loading을 하는 react native에서 제공하는 Component임 */}
+          </View> :
+          (
+            days.map((day, index) =>
+              <View key={index} style={styles.day}>
+                <Text style={styles.temp}>{parseFloat(day.temp.day).toFixed(1)}</Text>
+                <Text style={styles.description}>{day.weather[0].main}</Text>
+                <Text style={styles.tinyText}>{day.weather[0].description}</Text>
+
+              </View>)
+          )
+        }
+
+
+      </ScrollView >
 
       <StatusBar />
     </View >
@@ -116,11 +125,15 @@ const styles = StyleSheet.create({
   },
   temp: {
     marginTop: 50,
-    fontSize: 158
+    fontSize: 110,
+    fontWeight: 'bold'
   },
   description: {
     marginTop: -20,
-    fontSize: 60,
+    fontSize: 40,
+  },
+  tinyText: {
+    fontSize: 20
   }
 
 });
